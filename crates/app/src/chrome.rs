@@ -1371,6 +1371,102 @@ pub fn pane_top() -> f32 {
     70.0
 }
 
+/// What a toolbar button does, in one plain sentence (its hover text).
+fn toolbar_tip(icon: Icon) -> &'static str {
+    use crate::i18n::tc;
+    match icon {
+        // i18n: hover text of the Add URL toolbar button
+        Icon::AddUrl => tc("tooltip", "Download a file: paste its web address (URL)."),
+        // i18n: hover text of the Add Torrent toolbar button
+        Icon::AddTorrent => tc("tooltip", "Download from a torrent file or a magnet link."),
+        // i18n: hover text of the Resume toolbar button
+        Icon::Resume => tc(
+            "tooltip",
+            "Continue the selected downloads where they stopped.",
+        ),
+        // i18n: hover text of the Stop toolbar button
+        Icon::Stop => tc(
+            "tooltip",
+            "Pause the selected downloads. You can resume them later.",
+        ),
+        // i18n: hover text of the Stop All toolbar button
+        Icon::StopAll => tc("tooltip", "Pause every running download."),
+        // i18n: hover text of the Delete toolbar button
+        Icon::Delete => tc("tooltip", "Remove the selected downloads from the list."),
+        // i18n: hover text of the Delete Completed toolbar button
+        Icon::DeleteCompleted => tc("tooltip", "Clear all finished downloads from the list."),
+        // i18n: hover text of the Options toolbar button
+        Icon::Options => tc(
+            "tooltip",
+            "Change settings: folders, speed, connection and more.",
+        ),
+        // i18n: hover text of the Scheduler toolbar button
+        Icon::Scheduler => tc(
+            "tooltip",
+            "Start and stop downloads automatically at set times.",
+        ),
+        // i18n: hover text of the Start Queue toolbar button
+        Icon::StartQueue => tc(
+            "tooltip",
+            "Start the downloads of the main queue, one after another.",
+        ),
+        // i18n: hover text of the Stop Queue toolbar button
+        Icon::StopQueue => tc("tooltip", "Stop the main queue."),
+        _ => "",
+    }
+}
+
+/// Why a greyed toolbar button is greyed, so the user knows what to do (hover text).
+fn toolbar_why_off(icon: Icon) -> &'static str {
+    use crate::i18n::tc;
+    match icon {
+        // i18n: hover text under a greyed Resume button
+        Icon::Resume => tc(
+            "tooltip",
+            "Not available: select a stopped or failed download first.",
+        ),
+        // i18n: hover text under a greyed Stop button
+        Icon::Stop => tc("tooltip", "Not available: select a running download first."),
+        // i18n: hover text under a greyed Stop All button
+        Icon::StopAll => tc("tooltip", "Not available: no download is running."),
+        // i18n: hover text under a greyed Delete button
+        Icon::Delete => tc(
+            "tooltip",
+            "Not available: select a download that is not running first.",
+        ),
+        // i18n: hover text under a greyed Delete Completed button
+        Icon::DeleteCompleted => tc("tooltip", "Not available: there are no finished downloads."),
+        // i18n: hover text under a greyed Start Queue button
+        Icon::StartQueue => tc(
+            "tooltip",
+            "Not available: the main queue is already running.",
+        ),
+        // i18n: hover text under a greyed Stop Queue button
+        Icon::StopQueue => tc("tooltip", "Not available: the main queue is not running."),
+        _ => "",
+    }
+}
+
+/// What a top node of the Categories tree holds (hover text). Matched on the English source
+/// of the label; the user's own categories and queues are named by the user and get none.
+fn tree_tip(label: &str) -> Option<&'static str> {
+    use crate::i18n::tc;
+    Some(match label {
+        // i18n: hover text of the All Downloads node in the Categories pane
+        "All Downloads" => tc("tooltip", "Every download, finished or not."),
+        // i18n: hover text of the Unfinished node in the Categories pane
+        "Unfinished" => tc(
+            "tooltip",
+            "Downloads that are running, stopped or have failed.",
+        ),
+        // i18n: hover text of the Finished node in the Categories pane
+        "Finished" => tc("tooltip", "Downloads that are complete."),
+        // i18n: hover text of the Queues node in the Categories pane
+        "Queues" => tc("tooltip", "Groups of downloads that run one after another."),
+        _ => return None,
+    })
+}
+
 pub fn toolbar(
     ui: &mut Ui,
     o: Pos2,
@@ -1431,7 +1527,33 @@ pub fn toolbar(
             vec2(total, band_h),
         ));
         let resp = ui.interact(rc, egui::Id::unique(("tb", i)), winui::pointer_only());
-        let resp = if cut { resp.on_hover_text(full) } else { resp };
+        // Hover (friendlier window): what the button does in one plain sentence, the whole label
+        // first when it is cut, and why a greyed button is greyed.
+        let mut hover = String::new();
+        if cut {
+            hover.push_str(full);
+        }
+        let tip = toolbar_tip(*icon);
+        if !tip.is_empty() {
+            if !hover.is_empty() {
+                hover.push('\n');
+            }
+            hover.push_str(tip);
+        }
+        if !*enabled {
+            let why = toolbar_why_off(*icon);
+            if !why.is_empty() {
+                if !hover.is_empty() {
+                    hover.push('\n');
+                }
+                hover.push_str(why);
+            }
+        }
+        let resp = if hover.is_empty() {
+            resp
+        } else {
+            resp.on_hover_text(hover)
+        };
         let past_button = |q: Pos2| winui::mx(q.x) >= x + bw;
         if *enabled && resp.hovered() {
             // Hover (IDM 6.42, captured 2026-10-30): the button's own width, from the band's top,
@@ -1890,6 +2012,11 @@ pub fn categories(
             egui::Id::unique(("tree-row", k)),
             winui::pointer_only(),
         );
+        if r.level == 0
+            && let Some(tip) = tree_tip(&r.label)
+        {
+            resp.clone().on_hover_text_at_pointer(tip);
+        }
         // A tree item: its name (with its count), selected, open or shut, its level; Click
         // selects it (egui's own), Expand / Collapse open and shut it, Show context menu opens
         // its menu.

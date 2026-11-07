@@ -4760,6 +4760,72 @@ toolbar	Stop	Stop
 toolbar	Stop All	Stop All
 #. toolbar button in the main window
 toolbar	Stop Queue	Stop Queue
+#. text in the main window (menus, toolbar, Categories pane)
+#. hover text of the Options toolbar button
+tooltip	Change settings: folders, speed, connection and more.	Change settings: folders, speed, connection and more.
+#. text in the main window (menus, toolbar, Categories pane)
+#. hover text of the Delete Completed toolbar button
+tooltip	Clear all finished downloads from the list.	Clear all finished downloads from the list.
+#. text in the main window (menus, toolbar, Categories pane)
+#. hover text of the Resume toolbar button
+tooltip	Continue the selected downloads where they stopped.	Continue the selected downloads where they stopped.
+#. text in the main window (menus, toolbar, Categories pane)
+#. hover text of the Add URL toolbar button
+tooltip	Download a file: paste its web address (URL).	Download a file: paste its web address (URL).
+#. text in the main window (menus, toolbar, Categories pane)
+#. hover text of the Add Torrent toolbar button
+tooltip	Download from a torrent file or a magnet link.	Download from a torrent file or a magnet link.
+#. text in the main window (menus, toolbar, Categories pane)
+#. hover text of the Finished node in the Categories pane
+tooltip	Downloads that are complete.	Downloads that are complete.
+#. text in the main window (menus, toolbar, Categories pane)
+#. hover text of the Unfinished node in the Categories pane
+tooltip	Downloads that are running, stopped or have failed.	Downloads that are running, stopped or have failed.
+#. text in the main window (menus, toolbar, Categories pane)
+#. hover text of the All Downloads node in the Categories pane
+tooltip	Every download, finished or not.	Every download, finished or not.
+#. text in the main window (menus, toolbar, Categories pane)
+#. hover text of the Queues node in the Categories pane
+tooltip	Groups of downloads that run one after another.	Groups of downloads that run one after another.
+#. text in the main window (menus, toolbar, Categories pane)
+#. hover text under a greyed Stop All button
+tooltip	Not available: no download is running.	Not available: no download is running.
+#. text in the main window (menus, toolbar, Categories pane)
+#. hover text under a greyed Delete button
+tooltip	Not available: select a download that is not running first.	Not available: select a download that is not running first.
+#. text in the main window (menus, toolbar, Categories pane)
+#. hover text under a greyed Stop button
+tooltip	Not available: select a running download first.	Not available: select a running download first.
+#. text in the main window (menus, toolbar, Categories pane)
+#. hover text under a greyed Resume button
+tooltip	Not available: select a stopped or failed download first.	Not available: select a stopped or failed download first.
+#. text in the main window (menus, toolbar, Categories pane)
+#. hover text under a greyed Start Queue button
+tooltip	Not available: the main queue is already running.	Not available: the main queue is already running.
+#. text in the main window (menus, toolbar, Categories pane)
+#. hover text under a greyed Stop Queue button
+tooltip	Not available: the main queue is not running.	Not available: the main queue is not running.
+#. text in the main window (menus, toolbar, Categories pane)
+#. hover text under a greyed Delete Completed button
+tooltip	Not available: there are no finished downloads.	Not available: there are no finished downloads.
+#. text in the main window (menus, toolbar, Categories pane)
+#. hover text of the Stop All toolbar button
+tooltip	Pause every running download.	Pause every running download.
+#. text in the main window (menus, toolbar, Categories pane)
+#. hover text of the Stop toolbar button
+tooltip	Pause the selected downloads. You can resume them later.	Pause the selected downloads. You can resume them later.
+#. text in the main window (menus, toolbar, Categories pane)
+#. hover text of the Delete toolbar button
+tooltip	Remove the selected downloads from the list.	Remove the selected downloads from the list.
+#. text in the main window (menus, toolbar, Categories pane)
+#. hover text of the Scheduler toolbar button
+tooltip	Start and stop downloads automatically at set times.	Start and stop downloads automatically at set times.
+#. text in the main window (menus, toolbar, Categories pane)
+#. hover text of the Start Queue toolbar button
+tooltip	Start the downloads of the main queue, one after another.	Start the downloads of the main queue, one after another.
+#. text in the main window (menus, toolbar, Categories pane)
+#. hover text of the Stop Queue toolbar button
+tooltip	Stop the main queue.	Stop the main queue.
 #. unit after a number in the download list (sizes, speeds, status)
 #. {n} = a number (keep the braces as they are)
 unit	{n} GB	{n} GB

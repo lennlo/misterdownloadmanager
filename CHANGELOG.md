@@ -22,6 +22,7 @@ Each release's notes on GitHub come from its section here (`## [X.Y.Z]`, see
 
 ### Added
 
+- **Hover explanations in the main window**: each toolbar button says in one plain sentence what it does, a greyed button says why it is greyed and what to select first, and the top nodes of the Categories pane say what they hold. The texts are in the translation catalogs; a language without them shows the English until it is translated.
 - **The website: a page for every feature, and a Themes page**
   ([#260](https://github.com/anefzaoui/misterdownloadmanager/issues/260)): each feature has a page
   of its own, with the real window, where to find it in the app, since which version, and what it
