@@ -167,7 +167,7 @@ enum Ask {
 /// What the work behind the window has reached.
 #[derive(Default)]
 struct Shared {
-    /// The user's answer to \"look this problem up on GitHub?\".
+    /// The user's answer to the question whether to look this problem up on GitHub.
     ask: Ask,
     made: Option<Made>,
     /// Fetching the symbols: (bytes so far, total).
