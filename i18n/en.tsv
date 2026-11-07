@@ -1715,9 +1715,13 @@
 #. noun: the user name for the server (an input box follows)
 #. noun: the user name and password section
 	Login	Login
+#. link (opens a web page) in crashui.rs
+	Look it up	Look it up
 #. checkbox in the Options window
 #. Options → Archives → Link grabber check box (IDM's Download all links looks every link up)
 	Look links up when they arrive (name, size, online)	Look links up when they arrive (name, size, online)
+#. text in crashui.rs
+	Look this problem up on GitHub first? It sends its code and your version number.	Look this problem up on GitHub first? It sends its code and your version number.
 #. text in the Add torrent window; button in the Download video window
 	Look up	Look up
 #. tooltip (why a control is greyed) in the Download video window
@@ -2147,7 +2151,7 @@
 #. text in helpers.rs
 #. Video helpers: no copy of this helper yet
 	Not installed yet	Not installed yet
-#. button in helpers.rs
+#. link (opens a web page) in crashui.rs; button in helpers.rs
 	Not now	Not now
 #. text in helpers.rs
 	Not now? Get them later from Tasks → Download video from a page.	Not now? Get them later from Tasks → Download video from a page.

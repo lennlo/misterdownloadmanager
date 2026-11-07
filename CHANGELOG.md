@@ -22,6 +22,8 @@ Each release's notes on GitHub come from its section here (`## [X.Y.Z]`, see
 
 ### Added
 
+- **Crash report window asks before it goes online**: the download of the release's symbols and the search for an issue about the same problem (both on GitHub) now wait for a yes (**Look it up** / **Not now**). Before, they ran on their own.
+- **Checking for updates is off until you switch it on** (Help → Check for updates). It was on by default.
 - **Hover explanations in the main window**: each toolbar button says in one plain sentence what it does, a greyed button says why it is greyed and what to select first, and the top nodes of the Categories pane say what they hold. The texts are in the translation catalogs; a language without them shows the English until it is translated.
 - **The website: a page for every feature, and a Themes page**
   ([#260](https://github.com/anefzaoui/misterdownloadmanager/issues/260)): each feature has a page

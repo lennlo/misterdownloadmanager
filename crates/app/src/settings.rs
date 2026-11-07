@@ -441,7 +441,7 @@ impl Default for Settings {
             torrent_stop_ratio: 200,
             torrent_stop_minutes_on: false,
             torrent_stop_minutes: 1440,
-            update_check: true,
+            update_check: false, // off until the user switches it on: nothing goes online by itself
             update_checked: 0,
             custom_categories: Vec::new(),
             builtin_categories: Vec::new(),

@@ -154,9 +154,21 @@ struct Job {
     parent: u32,
 }
 
+/// Whether the user let MDM look this problem up on GitHub. Nothing goes online before the
+/// answer: the symbols' download and the search for an issue both reach GitHub.
+#[derive(Clone, Copy, Default, PartialEq, Eq)]
+enum Ask {
+    #[default]
+    Pending,
+    Allowed,
+    Declined,
+}
+
 /// What the work behind the window has reached.
 #[derive(Default)]
 struct Shared {
+    /// The user's answer to \"look this problem up on GitHub?\".
+    ask: Ask,
     made: Option<Made>,
     /// Fetching the symbols: (bytes so far, total).
     fetching: Option<(u64, Option<u64>)>,
@@ -227,6 +239,17 @@ fn prepare(job: &Job, shared: Arc<Mutex<Shared>>, ctx: egui::Context) {
             .as_ref()
             .is_some_and(|a| !a.missing_symbols.is_empty());
         set(&shared, &ctx, |s| s.made = Some(made));
+
+        // Nothing goes online until the user says so: wait for the answer given in the window
+        // (a window closed meanwhile ends the program, and this thread with it).
+        loop {
+            let ask = shared.lock().map_or(Ask::Declined, |s| s.ask);
+            match ask {
+                Ask::Pending => std::thread::sleep(Duration::from_millis(200)),
+                Ask::Allowed => break,
+                Ask::Declined => return,
+            }
+        }
 
         let Ok(rt) = tokio::runtime::Builder::new_current_thread()
             .enable_all()
@@ -343,10 +366,16 @@ impl ReportWindow {
         }
     }
 
+    fn set_ask(&self, answer: Ask) {
+        if let Ok(mut s) = self.shared.lock() {
+            s.ask = answer;
+        }
+    }
+
     fn body(&mut self, ui: &mut Ui, o: Pos2) {
         let p = ui.painter().clone();
         let alive = self.app_alive();
-        let (made, fetching, no_symbols, searching, found) = {
+        let (made, fetching, no_symbols, searching, found, ask) = {
             let s = self.shared.lock().unwrap_or_else(|e| e.into_inner());
             (
                 s.made.clone(),
@@ -354,6 +383,7 @@ impl ReportWindow {
                 s.no_symbols.clone(),
                 s.searching,
                 s.found.clone(),
+                s.ask,
             )
         };
 
@@ -469,17 +499,54 @@ impl ReportWindow {
         } else if no_symbols.is_some() {
             // i18n: crash report window: the symbols couldn't be downloaded; the report still works
             Some(crate::i18n::t("The symbols couldn't be fetched: some lines of the report show addresses instead of names (the developers can still read them).").to_owned())
+        } else if ask == Ask::Pending && made.is_some() {
+            // i18n: crash report window: asks before anything is looked up on GitHub (the symbols and an issue about the same problem); two links answer it
+            Some(
+                crate::i18n::t(
+                    "Look this problem up on GitHub first? It sends its code and your version number.",
+                )
+                .to_owned(),
+            )
         } else {
             None
         };
+        let asking = ask == Ask::Pending && made.is_some();
         if let Some(s) = self.told.clone().or(status) {
             // One line between the report and the check box: a long one (the symbols' note, a
             // translation, an issue's title) is cut at the window's right margin with "...",
             // and shown whole under the pointer (#164).
-            let (rc, cut) =
-                winui::text_fit(&p, o.x + 16.0, o.y + 452.0, &s, winui::TEXT(), o.x + 604.0);
+            let (rc, cut) = winui::text_fit(
+                &p,
+                o.x + 16.0,
+                o.y + 452.0,
+                &s,
+                winui::TEXT(),
+                o.x + if asking { 410.0 } else { 604.0 },
+            );
             if cut {
                 winui::full_on_hover(ui, rc, "crash-status", &s);
+            }
+        }
+        if asking {
+            if winui::link(
+                ui,
+                &p,
+                o.x + 424.0,
+                o.y + 452.0,
+                "Look it up",
+                "crash-online-yes",
+            ) {
+                self.set_ask(Ask::Allowed);
+            }
+            if winui::link(
+                ui,
+                &p,
+                o.x + 524.0,
+                o.y + 452.0,
+                "Not now",
+                "crash-online-no",
+            ) {
+                self.set_ask(Ask::Declined);
             }
         }
         if let Some(d) = made.as_ref().and_then(|m| m.dump.as_ref())

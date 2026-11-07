@@ -18,6 +18,8 @@ In the window:
 3. **Send on GitHub** opens GitHub's **Crash report** form in your browser, already filled in, along with the folder that holds the report. Drag the report's file into the form, check it, and submit. You need a GitHub account. **Nothing is sent by itself.**
 4. If someone already reported the same problem, the window says so (**Already reported as issue #…**). **Open the reported issue** opens it and puts your report on the clipboard, so you can add it as a comment.
 
+Before MDM looks anything up online (the release's symbols, and a search for an issue about the same problem, both on GitHub), the window asks: **Look it up** or **Not now**. Without your yes nothing goes online, and the report works either way.
+
 The other buttons copy the report, open its folder, or start MDM again.
 
 ## What a report contains
